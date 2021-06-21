@@ -7,27 +7,22 @@ public class ThreadPrint {
 
 	public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-	    ExecutorService service = Executors.newFixedThreadPool(3);
-	    int x = 0;
-	    while (x < 100) {
-	        service.submit(() -> {
-	            System.out.print("A ");
-	            return "A";
-	        }).get();
+        ExecutorService service = Executors.newFixedThreadPool(3);
+        int x = 0;
+        while (x < 100) {
+            service.submit(getTask("A ")).get();
+            service.submit(getTask("B ")).get();
+            service.submit(getTask("C ")).get();
+            x++;
+        }
 
-	        service.submit(() -> {
-	            System.out.print("B ");
-	            return "B";
-	        }).get();
+        service.shutdown();
+    }
 
-	        service.submit(() -> {
-	            System.out.print("C ");
-	            return "C";
-	        }).get();
-
-	        x++;
-	    }
-
-	    service.shutdown();
-	}
+    private static Callable<String> getTask(String task) {
+        return () -> {
+            System.out.print(task);
+            return task;
+        };
+    }
 }
