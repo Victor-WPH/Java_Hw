@@ -40,6 +40,7 @@ class Producer implements Runnable {
 	public void produce(int i) throws InterruptedException  {
 		synchronized(sharedList) {
 			while(sharedList.size() == MAX_SIZE) {
+				System.out.println("waiting for consumer to consume");
 				sharedList.wait();
 				
 			}
@@ -79,6 +80,7 @@ class Consumer implements Runnable {
 	public void consume(int i) throws InterruptedException  {
 		synchronized(sharedList) {
 			while(sharedList.isEmpty()) {
+				System.out.println("waiting for producer to produce");
 				sharedList.wait();
 				
 			}
@@ -90,4 +92,3 @@ class Consumer implements Runnable {
 		}
 	}
 }
-
